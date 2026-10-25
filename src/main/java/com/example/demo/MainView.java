@@ -22,31 +22,26 @@ public class MainView extends VerticalLayout {
         this.filter = new TextField();
         this.addNewBtn = new Button("Add your people");
 
-        // Настройка поля поиска
         filter.setPlaceholder("Filter by last name");
         filter.setValueChangeMode(ValueChangeMode.EAGER);
-        filter.addValueChangeListener(e -> listCustomers(e.getValue()));
+        filter.addValueChangeListener(e -> listCustomersFunction(e.getValue()));
 
-        // Настройка кнопки добавления тестового клиента
         addNewBtn.addClickListener(e -> {
             repo.save(new Customer("Alex", "Novak"));
-            listCustomers(filter.getValue());
+            listCustomersFunction(filter.getValue());
         });
 
-        // Компоновка интерфейса
         HorizontalLayout actions = new HorizontalLayout(filter, addNewBtn);
         add(actions, grid);
 
-        // Настройка колонок таблицы
         grid.setHeight("300px");
         grid.setColumns("id", "firstName", "lastName");
         grid.getColumnByKey("id").setWidth("50px").setFlexGrow(0);
 
-        // Первичная загрузка данных
-        listCustomers("");
+        listCustomersFunction("");
     }
 
-    private void listCustomers(String filterText) {
+    private void listCustomersFunction(String filterText) {
         if (filterText == null || filterText.isEmpty()) {
             grid.setItems(repo.findAll());
         } else {
